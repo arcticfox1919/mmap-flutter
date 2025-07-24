@@ -1,0 +1,3 @@
+[submodule "deps/mio"]
+	path = deps/mio
+	url = https://github.com/vimpunk/mio.git
