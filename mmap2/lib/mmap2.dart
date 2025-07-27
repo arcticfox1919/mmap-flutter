@@ -1,5 +1,4 @@
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+library mmap2;
+
+export 'src/mmap.dart';
+export 'src/mmap_exception.dart';

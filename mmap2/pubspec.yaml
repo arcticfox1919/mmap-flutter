@@ -1,20 +1,22 @@
 name: mmap2
-description: "A new Flutter package project."
-version: 0.0.1
+description: |
+  Bindings for `An mmap package for Dart`.
+
+  Regenerate bindings with `dart run ffigen --config ffigen.yaml`.
+version: 0.1.0
 homepage:
 
 environment:
   sdk: ^3.8.1
-  flutter: ">=1.17.0"
+
 
 dependencies:
-  flutter:
-    sdk: flutter
+  ffi: ^2.1.4
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^5.0.0
+  test: ^1.26.3
+  lints: ^6.0.0
+  ffigen: ^19.1.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

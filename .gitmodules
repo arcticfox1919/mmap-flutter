@@ -1,3 +1,6 @@
 [submodule "deps/mio"]
 	path = deps/mio
 	url = https://github.com/vimpunk/mio.git
+[submodule "deps/mio_wrapper/cmake/ios-cmake"]
+	path = deps/mio_wrapper/cmake/ios-cmake
+	url = https://github.com/leetal/ios-cmake.git

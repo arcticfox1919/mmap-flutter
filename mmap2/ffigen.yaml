@@ -1,0 +1,27 @@
+name: 'MioBindings'
+description: 'Bindings for mio_wrapper library'
+output: 'lib/src/mio_wrapper_bindings.dart'
+llvm-path:
+  - 'D:\develop2\LLVM'
+
+headers:
+  entry-points:
+    - '../deps/mio_wrapper/include/mio_wrapper.h'
+
+compiler-opts:
+  - '-I../deps/mio_wrapper/include'
+
+preamble: |
+  // Copyright (c) 2025, mmap2 project.
+  // All rights reserved.
+  
+  // ignore_for_file: always_specify_types
+  // ignore_for_file: camel_case_types
+  // ignore_for_file: non_constant_identifier_names
+functions:
+  include:
+    - 'mio_.*'
+
+comments:
+  style: any
+  length: full
