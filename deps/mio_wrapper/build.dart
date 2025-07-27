@@ -277,11 +277,12 @@ class NativeLibraryBuilder {
 
       print('    📱 Building iOS $name ($arch)...');
 
-      final buildDir = 'build/ios-cache/$arch';
+      final buildDir = 'build/ios-cache/$name';
+      final toolchainPath = '${Directory.current.path}/cmake/ios-cmake/ios.toolchain.cmake';
       _runCMakeConfigureAndBuild(buildDir, [
         '-G',
         'Xcode',
-        '-DCMAKE_TOOLCHAIN_FILE=cmake/ios-cmake/ios.toolchain.cmake',
+        '-DCMAKE_TOOLCHAIN_FILE=$toolchainPath',
         '-DPLATFORM=$platform',
         '-DARCHS=$arch',
         '-DDEPLOYMENT_TARGET=13.0',
@@ -314,16 +315,16 @@ class NativeLibraryBuilder {
   }
 
   String? _findIOSLibrary(String buildDir, String buildType) {
-    // Look for the built library in common paths
+    // Look for the built framework in common paths
     final possiblePaths = [
-      '$buildDir/$buildType-iphoneos/libmmap2.a',
-      '$buildDir/$buildType-iphonesimulator/libmmap2.a',
-      '$buildDir/$buildType/libmmap2.a',
-      '$buildDir/libmmap2.a',
+      '$buildDir/$buildType-iphoneos/mmap2.framework',
+      '$buildDir/$buildType-iphonesimulator/mmap2.framework',
+      '$buildDir/$buildType/mmap2.framework',
+      '$buildDir/mmap2.framework',
     ];
 
     for (final path in possiblePaths) {
-      if (File(path).existsSync()) {
+      if (Directory(path).existsSync()) {
         return path;
       }
     }
@@ -333,7 +334,7 @@ class NativeLibraryBuilder {
     if (!dir.existsSync()) return null;
 
     for (final entity in dir.listSync(recursive: true)) {
-      if (entity is File && entity.path.endsWith('libmmap2.a')) {
+      if (entity is Directory && entity.path.endsWith('mmap2.framework')) {
         return entity.path;
       }
     }
@@ -345,171 +346,87 @@ class NativeLibraryBuilder {
     List<Map<String, String>> libraries,
     BuildConfig config,
   ) {
-    print('    🔗 Creating XCFramework...');
+    print('    🔗 Creating XCFramework following Apple standards...');
 
     final outputDir = Directory('dist/ios');
+    
+    // Always clean the output directory first
+    if (outputDir.existsSync()) {
+      outputDir.deleteSync(recursive: true);
+      print('    🗑️ Cleaned dist/ios directory');
+    }
     outputDir.createSync(recursive: true);
 
     final xcframeworkPath = '${outputDir.path}/mmap2.xcframework';
 
-    // Remove existing XCFramework if it exists
-    final existingXCFramework = Directory(xcframeworkPath);
-    if (existingXCFramework.existsSync()) {
-      existingXCFramework.deleteSync(recursive: true);
+    // Step 1: Find the actual framework paths (not .a files)
+    final deviceFrameworkPath = 'build/ios-cache/device/Release-iphoneos/mmap2.framework';
+    final simArm64FrameworkPath = 'build/ios-cache/simulator-arm64/Release-iphonesimulator/mmap2.framework';
+    final simX64FrameworkPath = 'build/ios-cache/simulator-x64/Release-iphonesimulator/mmap2.framework';
+
+    // Verify all frameworks exist
+    if (!Directory(deviceFrameworkPath).existsSync()) {
+      throw Exception('Device framework not found: $deviceFrameworkPath');
+    }
+    if (!Directory(simArm64FrameworkPath).existsSync()) {
+      throw Exception('Simulator arm64 framework not found: $simArm64FrameworkPath');
+    }
+    if (!Directory(simX64FrameworkPath).existsSync()) {
+      throw Exception('Simulator x86_64 framework not found: $simX64FrameworkPath');
     }
 
-    // First, create separate frameworks for simulator architectures that need to be combined
-    final simulatorLibs = libraries
-        .where((lib) => lib['sdk'] == 'iphonesimulator')
-        .toList();
-    final deviceLibs = libraries
-        .where((lib) => lib['sdk'] == 'iphoneos')
-        .toList();
-
-    final frameworkPaths = <String>[];
-
-    // Create simulator fat library if we have multiple simulator architectures
-    if (simulatorLibs.length > 1) {
-      print('    📱 Creating simulator fat library...');
-      final simLibPaths = simulatorLibs.map((lib) => lib['path']!).toList();
-      final simFatLib = '${outputDir.path}/libmmap2-simulator.a';
-
-      final lipoResult = Process.runSync('lipo', [
-        '-create',
-        ...simLibPaths,
-        '-output',
-        simFatLib,
-      ]);
-      if (lipoResult.exitCode != 0) {
-        throw Exception(
-          'Failed to create simulator fat library: ${lipoResult.stderr}',
-        );
-      }
-
-      // Create framework for simulator
-      final simFrameworkPath = '${outputDir.path}/mmap2-simulator.framework';
-      _createFramework(simFrameworkPath, simFatLib, 'mmap2', config.version);
-      frameworkPaths.add(simFrameworkPath);
-    } else if (simulatorLibs.length == 1) {
-      // Single simulator architecture
-      final simFrameworkPath = '${outputDir.path}/mmap2-simulator.framework';
-      _createFramework(
-        simFrameworkPath,
-        simulatorLibs.first['path']!,
-        'mmap2',
-        config.version,
-      );
-      frameworkPaths.add(simFrameworkPath);
-    }
-
-    // Create device framework
-    if (deviceLibs.isNotEmpty) {
-      final deviceFrameworkPath = '${outputDir.path}/mmap2-device.framework';
-      _createFramework(
-        deviceFrameworkPath,
-        deviceLibs.first['path']!,
-        'mmap2',
-        config.version,
-      );
-      frameworkPaths.add(deviceFrameworkPath);
-    }
-
-    // Create XCFramework from the frameworks
-    final xcodebuildArgs = [
-      'xcodebuild',
-      '-create-xcframework',
-      ...frameworkPaths.expand((path) => ['-framework', path]),
+    // Step 2: Create unified simulator framework (fat binary for arm64 + x86_64)
+    final unifiedSimFrameworkPath = '${outputDir.path}/mmap2.framework';
+    print('    📱 Creating unified simulator framework...');
+    
+    // Copy arm64 simulator framework as base
+    Process.runSync('cp', ['-R', simArm64FrameworkPath, unifiedSimFrameworkPath]);
+    
+    // Create fat binary combining arm64 and x86_64 simulator binaries
+    final lipoResult = Process.runSync('lipo', [
+      '-create',
+      '$simArm64FrameworkPath/mmap2',
+      '$simX64FrameworkPath/mmap2',
       '-output',
-      xcframeworkPath,
+      '$unifiedSimFrameworkPath/mmap2',
+    ]);
+    
+    if (lipoResult.exitCode != 0) {
+      throw Exception('Failed to create simulator fat binary: ${lipoResult.stderr}');
+    }
+
+    // Step 3: Create XCFramework using the device framework and unified simulator framework
+    print('    📦 Creating XCFramework...');
+    final xcodebuildArgs = [
+      '-create-xcframework',
+      '-framework', deviceFrameworkPath,
+      '-framework', unifiedSimFrameworkPath,
+      '-output', xcframeworkPath,
     ];
 
-    final result = Process.runSync(
-      'xcodebuild',
-      xcodebuildArgs.skip(1).toList(),
-    );
+    final result = Process.runSync('xcodebuild', xcodebuildArgs);
     if (result.exitCode != 0) {
       throw Exception('Failed to create XCFramework: ${result.stderr}');
     }
 
     print('    ✅ XCFramework created: $xcframeworkPath');
 
-    // Clean up temporary frameworks
-    for (final frameworkPath in frameworkPaths) {
-      final frameworkDir = Directory(frameworkPath);
-      if (frameworkDir.existsSync()) {
-        frameworkDir.deleteSync(recursive: true);
-      }
+    // Clean up temporary unified simulator framework
+    final unifiedSimDir = Directory(unifiedSimFrameworkPath);
+    if (unifiedSimDir.existsSync()) {
+      unifiedSimDir.deleteSync(recursive: true);
     }
 
-    // Also clean up temporary fat library
-    final tempFatLib = File('${outputDir.path}/libmmap2-simulator.a');
-    if (tempFatLib.existsSync()) {
-      tempFatLib.deleteSync();
-    }
-
-    // Show XCFramework info
+    // Show XCFramework info for verification
     final infoResult = Process.runSync('xcodebuild', [
       '-list',
       '-xcframework',
       xcframeworkPath,
     ]);
     if (infoResult.exitCode == 0) {
-      print('    📋 XCFramework info:');
-      print('${infoResult.stdout}');
+      print('    📋 XCFramework contents:');
+      print(infoResult.stdout);
     }
-  }
-
-  void _createFramework(
-    String frameworkPath,
-    String libraryPath,
-    String frameworkName,
-    String version,
-  ) {
-    final frameworkDir = Directory(frameworkPath);
-    if (frameworkDir.existsSync()) {
-      frameworkDir.deleteSync(recursive: true);
-    }
-
-    final headersDir = Directory('$frameworkPath/Headers');
-    headersDir.createSync(recursive: true);
-
-    // Copy library
-    File(libraryPath).copySync('$frameworkPath/$frameworkName');
-
-    // Copy headers
-    final headerFile = File('include/mio_wrapper.h');
-    if (headerFile.existsSync()) {
-      headerFile.copySync('${headersDir.path}/mio_wrapper.h');
-    }
-
-    // Create Info.plist
-    final infoPlist =
-        '''<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-    <key>CFBundleDevelopmentRegion</key>
-    <string>en</string>
-    <key>CFBundleExecutable</key>
-    <string>$frameworkName</string>
-    <key>CFBundleIdentifier</key>
-    <string>com.mmap2.framework</string>
-    <key>CFBundleInfoDictionaryVersion</key>
-    <string>6.0</string>
-    <key>CFBundleName</key>
-    <string>$frameworkName</string>
-    <key>CFBundlePackageType</key>
-    <string>FMWK</string>
-    <key>CFBundleShortVersionString</key>
-    <string>$version</string>
-    <key>CFBundleVersion</key>
-    <string>1</string>
-    <key>MinimumOSVersion</key>
-    <string>13.0</string>
-</dict>
-</plist>''';
-
-    File('$frameworkPath/Info.plist').writeAsStringSync(infoPlist);
   }
 
   void _buildDesktop(String platform, BuildConfig config) {

@@ -126,7 +126,7 @@ elseif(IS_IOS)
     
     # Release-specific optimizations for iOS
     target_compile_options(${PROJECT_NAME} PRIVATE
-        $<$<CONFIG:Release>:-O3 -DNDEBUG -fvisibility=hidden>
+        $<$<CONFIG:Release>:-O3 -DNDEBUG>
     )
     
     # iOS requires static libraries for frameworks
@@ -134,7 +134,7 @@ elseif(IS_IOS)
         set_target_properties(${PROJECT_NAME} PROPERTIES
             FRAMEWORK TRUE
             FRAMEWORK_VERSION ${PROJECT_VERSION_MAJOR}
-            MACOSX_FRAMEWORK_IDENTIFIER com.mmap2.framework
+            MACOSX_FRAMEWORK_IDENTIFIER bczl.xyz.framework
             PUBLIC_HEADER "${HEADERS}"
         )
     endif()
