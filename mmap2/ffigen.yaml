@@ -1,8 +1,6 @@
 name: 'MioBindings'
 description: 'Bindings for mio_wrapper library'
 output: 'lib/src/mio_wrapper_bindings.dart'
-llvm-path:
-  - 'D:\develop2\LLVM'
 
 headers:
   entry-points:
