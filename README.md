@@ -2,7 +2,7 @@
 
 A Flutter package providing memory-mapped file I/O functionality using the [mio](https://github.com/mandreyel/mio) C++ library.
 
-[Mmap2]() provides efficient memory-mapped file access for Dart applications, allowing you to work with large files without loading them entirely into memory. This package wraps the powerful mio C++ library and exposes a clean, type-safe Dart API.
+[Mmap2](https://pub.dev/packages/mmap2) provides efficient memory-mapped file access for Dart applications, allowing you to work with large files without loading them entirely into memory. This package wraps the powerful mio C++ library and exposes a clean, type-safe Dart API.
 
 ## Project Structure
 
