@@ -4,7 +4,7 @@ description: |
 
   Regenerate bindings with `dart run ffigen --config ffigen.yaml`.
 version: 0.1.0
-homepage:
+homepage: https://github.com/arcticfox1919/mmap-flutter
 
 environment:
   sdk: ^3.8.1
