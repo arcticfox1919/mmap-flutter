@@ -117,7 +117,7 @@ mmap-flutter/
 The library supports three initialization methods depending on your use case:
 
 #### 1. Flutter Applications with MmapFlutter (Recommended)
-For Flutter applications, use the `mmap2_flutter` package which handles platform-specific library loading automatically:
+For Flutter projects, you can additionally add `mmap2_flutter` dependency which provides pre-built native libraries:
 
 **Step 1: Add dependencies to `pubspec.yaml`**
 ```yaml
