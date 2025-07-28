@@ -38,11 +38,12 @@ dependencies:
   mmap2: ^0.1.0
 ```
 
-For Flutter applications, consider using `mmap2_flutter` which provides automatic platform setup:
+For Flutter projects, you can additionally add `mmap2_flutter` dependency which provides pre-built native libraries:
 
 ```yaml
 dependencies:
   mmap2_flutter: ^0.1.0  
+  mmap2: ^0.1.0
 ```
 
 ## Quick Start

@@ -5,21 +5,26 @@ Cross-platform native library builder for mmap2 Flutter plugin using Dart.
 ## Quick Start
 
 ```bash
+dart run build.dart --help
+
 # Build for current platform
 dart build.dart
 
 # Build for specific platform
-dart build.dart android
-dart build.dart ios
-dart build.dart macos
-dart build.dart windows
-dart build.dart linux
+# windows
+dart run build.dart --platform windows
+# macos
+dart run build.dart --platform macos --clean
+# android
+dart run build.dart --platform android --clean --install
+# ios 
+dart run build.dart --platform ios --version 0.1.0 --clean --install
 
 # Build all platforms supported on current OS
 dart build.dart --all
 
 # Custom version
-dart build.dart --version 1.2.0 macos
+dart build.dart --platform android  --version 0.2.0
 
 # Clean build
 dart build.dart --clean --all
@@ -85,41 +90,12 @@ dist/
     └── mmap2.xcframework/
 ```
 
-## Examples
-
-### Build Android Libraries
-```bash
-dart build.dart android
-```
-Outputs: `dist/android/{arm64-v8a,armeabi-v7a,x86_64}/libmmap2.so`
-
-### Build iOS XCFramework
-```bash
-dart build.dart ios
-```
-Outputs: `dist/ios/mmap2.xcframework`
-
-### Build macOS Universal Library
-```bash
-dart build.dart macos
-```
-Outputs: `mmap2-1.0.0-macos-universal.zip`
-
-### Build with Custom Version
-```bash
-dart build.dart --version 2.1.0 --all
-```
-
-### Clean Build
-```bash
-dart build.dart --clean android ios
-```
-
 ## Environment Setup
 
 ### Android
 ```bash
 export ANDROID_NDK_ROOT=/path/to/android-ndk
+export NINJA_PATH=path/to/ninja
 ```
 
 ### iOS/macOS
@@ -136,16 +112,6 @@ xcode-select --install
 sudo apt-get update
 sudo apt-get install build-essential cmake
 ```
-
-## Integration with Flutter
-
-The generated libraries are designed to work seamlessly with Flutter projects:
-
-1. **Android**: Copy `.so` files to `android/src/main/jniLibs/{abi}/`
-2. **iOS**: Add XCFramework to Xcode project or use CocoaPods
-3. **macOS**: Add `.dylib` to macOS bundle
-4. **Windows**: Place `.dll` alongside executable
-5. **Linux**: Place `.so` in library path
 
 ## Troubleshooting
 
@@ -188,13 +154,6 @@ The Dart script provides detailed output including:
 
 ## Advanced Usage
 
-### iOS XCFramework Benefits
-The iOS build creates an XCFramework instead of traditional Fat libraries for several advantages:
-- **Architecture Compatibility**: Supports both arm64 device and arm64 simulator (which Fat libraries cannot handle)
-- **Modern Standard**: XCFramework is Apple's recommended distribution format
-- **Xcode Integration**: Better integration with modern Xcode versions
-- **Multi-platform Support**: Single package supports all iOS targets
-
 ### Cross-compilation
 The build system automatically handles cross-compilation:
 - **Android**: Uses NDK toolchain for all ABIs
@@ -203,27 +162,8 @@ The build system automatically handles cross-compilation:
   - iOS simulator (arm64 + x86_64)
 - **macOS**: Builds universal binaries (Intel + Apple Silicon)
 
-### Custom CMake Flags
-Modify the Dart script to add custom CMake flags:
-```dart
-final result = Process.runSync('cmake', [
-  '-B', buildDir.path,
-  '-DCUSTOM_FLAG=value',
-  // ... other flags
-  '.'
-]);
-```
-
 ### Version Management
 Version is passed to CMake as `PROJECT_VERSION` and used in:
 - Library versioning
 - Package naming
 - Framework Info.plist
-
-## Contributing
-
-When adding new platforms or features:
-1. Update the `_buildPlatform` method
-2. Add platform detection logic
-3. Update help text and documentation
-4. Test on target platform
