@@ -8,7 +8,7 @@ void main(List<String> args) {
 }
 
 class NativeLibraryBuilder {
-  static const String defaultVersion = '1.0.0';
+  static const String defaultVersion = '0.0.1';
 
   void run(List<String> args) {
     if (args.isEmpty || args.contains('--help') || args.contains('-h')) {

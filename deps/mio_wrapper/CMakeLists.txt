@@ -76,6 +76,11 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     POSITION_INDEPENDENT_CODE ON
 )
 
+# Add version string as compile definition
+target_compile_definitions(${PROJECT_NAME} PRIVATE 
+    MIO_WRAPPER_VERSION_STRING="${PROJECT_VERSION}"
+)
+
 # Include directories using modern CMake
 target_include_directories(${PROJECT_NAME}
     PUBLIC

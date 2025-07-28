@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'mmap2_flutter'
-  s.version          = '0.0.1'
+  s.version          = '0.2.0'
   s.summary          = 'Flutter plugin for memory-mapped file I/O.'
   s.description      = <<-DESC
 Flutter plugin for memory-mapped file I/O using the mio C++ library.
@@ -20,6 +20,7 @@ Provides cross-platform support for efficient file memory mapping.
   
   # Include XCFramework for mio wrapper
   s.vendored_frameworks = 'mmap2.xcframework'
+  s.xcconfig = { 'OTHER_LDFLAGS' => '-framework mmap2' }
 
   # Flutter.framework does not contain a i386 slice.
   s.swift_version = '5.0'

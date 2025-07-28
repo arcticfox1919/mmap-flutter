@@ -78,8 +78,12 @@ mmap-flutter/
    dart run build.dart --help
    # windows
    dart run build.dart --platform windows
+   # macos
+   dart run build.dart --platform macos --clean
    # android
    dart run build.dart --platform android --clean --install
+   # ios 
+   dart run build.dart --platform ios --version 0.1.0 --clean --install
    ```
 
 4. **Run tests:**

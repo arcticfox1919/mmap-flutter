@@ -136,6 +136,12 @@ MIO_WRAPPER_API void mio_mmap_destroy(MioMmapHandle* handle);
  */
 MIO_WRAPPER_API const char* mio_get_error_message(MioError error);
 
+/**
+ * Get the library version string
+ * @return Version string in format "major.minor.patch"
+ */
+MIO_WRAPPER_API const char* mio_get_version(void);
+
 #ifdef __cplusplus
 }
 #endif

@@ -5,6 +5,11 @@
 #include <cerrno>
 #include <system_error>
 
+// Version macros - can be overridden by build system
+#ifndef MIO_WRAPPER_VERSION_STRING
+#define MIO_WRAPPER_VERSION_STRING "0.0.0"
+#endif
+
 // Internal handle structure
 struct MioMmapHandle {
     std::unique_ptr<mio::ummap_source> read_mmap;
@@ -244,6 +249,10 @@ const char* mio_get_error_message(MioError error) {
         default:
             return "Unknown error";
     }
+}
+
+const char* mio_get_version(void) {
+    return MIO_WRAPPER_VERSION_STRING;
 }
 
 } // extern "C"
