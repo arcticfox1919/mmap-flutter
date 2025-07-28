@@ -10,6 +10,7 @@
 **/.DS_Store
 
 deps/mio_wrapper/dist/
+deps/mio_wrapper/release/
 
 # Flutter repo-specific
 /bin/cache/

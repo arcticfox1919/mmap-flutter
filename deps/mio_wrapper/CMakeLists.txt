@@ -72,8 +72,6 @@ add_library(mmap2::mmap2 ALIAS ${PROJECT_NAME})
 
 # Target properties
 set_target_properties(${PROJECT_NAME} PROPERTIES
-    VERSION ${PROJECT_VERSION}
-    SOVERSION ${PROJECT_VERSION_MAJOR}
     PUBLIC_HEADER "${HEADERS}"
     POSITION_INDEPENDENT_CODE ON
 )
