@@ -6,3 +6,7 @@
 
 * Completed the pure dart mmap2 package
 * Android support is provided through the mmap2_flutter 
+
+## 0.2.0
+
+* Added a method to get version number

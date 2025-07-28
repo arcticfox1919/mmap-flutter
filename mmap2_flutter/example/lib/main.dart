@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
       await MmapFlutter.initialize();
 
       setState(() {
-        _status = 'Initialized successfully';
+        _status = 'Initialized version:${Mmap.getVersion()}';
         _isInitialized = true;
       });
     } catch (e) {

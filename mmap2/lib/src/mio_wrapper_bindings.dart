@@ -260,6 +260,19 @@ class MioBindings {
       >('mio_get_error_message');
   late final _mio_get_error_message = _mio_get_error_messagePtr
       .asFunction<ffi.Pointer<ffi.Char> Function(int)>();
+
+  /// Get the library version string
+  /// @return Version string in format "major.minor.patch"
+  ffi.Pointer<ffi.Char> mio_get_version() {
+    return _mio_get_version();
+  }
+
+  late final _mio_get_versionPtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Char> Function()>>(
+        'mio_get_version',
+      );
+  late final _mio_get_version = _mio_get_versionPtr
+      .asFunction<ffi.Pointer<ffi.Char> Function()>();
 }
 
 typedef va_list = ffi.Pointer<ffi.Char>;

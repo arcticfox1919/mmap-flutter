@@ -5,3 +5,7 @@
 ## 0.1.0
 
 * Android support is provided 
+
+## 0.2.0
+
+* iOS support is provided 

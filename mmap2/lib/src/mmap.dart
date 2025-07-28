@@ -41,6 +41,17 @@ class Mmap {
     _customLibraryLoader = null;
   }
 
+  /// Get the library version string
+  /// Returns version string in format "major.minor.patch"
+  static String getVersion() {
+    _ensureInitialized();
+    final versionPtr = _bindings.mio_get_version();
+    if (versionPtr == ffi.nullptr) {
+      throw StateError('Failed to get version information');
+    }
+    return versionPtr.cast<Utf8>().toDartString();
+  }
+
   /// Initialize the library with the dynamic library
   static void initialize(ffi.DynamicLibrary library) {
     _bindings = MioBindings(library);
