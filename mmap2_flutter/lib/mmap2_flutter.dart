@@ -12,7 +12,7 @@ class MmapFlutter {
   ///
   /// This method handles platform-specific initialization for Flutter apps,
   /// including loading native libraries from the correct locations.
-  static Future<void> initialize() async {
+  static void initialize() {
     if (_initialized) return;
 
     ffi.DynamicLibrary library;

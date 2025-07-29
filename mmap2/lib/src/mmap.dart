@@ -17,7 +17,7 @@ enum AccessMode {
 }
 
 /// Special value to indicate mapping the entire file
-const int mapEntireFile = 0;
+const _mapEntireFile = 0;
 
 /// A memory-mapped file
 class Mmap {
@@ -112,7 +112,7 @@ class Mmap {
         pathPtr.cast<ffi.Char>(),
         accessMode,
         offset,
-        length ?? mapEntireFile,
+        length ?? _mapEntireFile,
         errorPtr,
       );
 
@@ -128,6 +128,10 @@ class Mmap {
   /// Get the data as a Uint8List (read-only)
   Uint8List get data {
     _checkValid();
+    if (_accessMode != AccessMode.read) {
+      throw StateError('Cannot get read-only data from write-enabled memory map. Use writableData instead.');
+    }
+
     final dataPtr = _bindings.mio_mmap_get_data(_handle);
     final size = _bindings.mio_mmap_get_size(_handle);
 

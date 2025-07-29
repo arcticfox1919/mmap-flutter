@@ -68,9 +68,9 @@ dart build.dart [options] [platform]
 ### Desktop Platforms
 Generated as ZIP packages for easy distribution:
 ```
-mmap2-1.0.0-macos-universal.zip
-mmap2-1.0.0-windows-x64.zip
-mmap2-1.0.0-linux-x86_64.zip
+mmap2-0.1.0-macos-universal.zip
+mmap2-0.1.0-windows-x64.zip
+mmap2-0.1.0-linux-x86_64.zip
 ```
 
 Each ZIP contains:

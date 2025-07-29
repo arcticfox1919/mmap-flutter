@@ -1,6 +1,6 @@
 # mmap2_flutter
 
-Flutter plugin for memory-mapped file I/O. This package provides Flutter-specific initialization and platform support for the [mmap2](https://pub.dev/packages/mmap2) package.
+Flutter plugin for memory-mapped file I/O. This package provides pre-built native libraries for Android and iOS platforms to support the [mmap2](https://pub.dev/packages/mmap2) package.
 
 ## Installation
 
@@ -8,12 +8,12 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  mmap2_flutter: ^0.1.0
+  mmap2_flutter: ^0.2.1
 ```
 
 ## Usage
 
-see [mmap2]()
+see [mmap2](https://pub.dev/packages/mmap2)
 
 
 

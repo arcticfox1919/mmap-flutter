@@ -110,6 +110,8 @@ mmap-flutter/
 
    Run `dart test`
 
+For detailed build information, see the document [mmap2 Native Library Builder](deps/mio_wrapper/README.md)
+
 ## Usage
 
 ### Initialization
@@ -117,15 +119,15 @@ mmap-flutter/
 The library supports three initialization methods depending on your use case:
 
 #### 1. Flutter Applications with MmapFlutter (Recommended)
-For Flutter projects, you can additionally add `mmap2_flutter` dependency which provides pre-built native libraries:
+For Flutter projects, you can additionally add `mmap2_flutter` dependency which provides pre-built native libraries for Android and iOS platforms, along with unified initialization for Flutter apps:
 
 **Step 1: Add dependencies to `pubspec.yaml`**
 ```yaml
 dependencies:
   flutter:
     sdk: flutter
-  mmap2_flutter: ^0.1.0    # Flutter plugin package
-  mmap2: ^0.1.0            # Core package (automatically included by mmap2_flutter)
+  mmap2_flutter: ^0.2.1    # Flutter plugin package
+  mmap2: ^0.2.1            # Core package 
 ```
 
 **Step 2: Initialize and use**
@@ -135,7 +137,7 @@ import 'package:mmap2/mmap2.dart';
 
 void main() async {
   // Automatic cross-platform initialization for Flutter
-  await MmapFlutter.initialize();
+  MmapFlutter.initialize();
   
   // Now you can use Mmap
   final mmap = Mmap.fromFile('example.txt');
@@ -149,7 +151,7 @@ For pure Dart applications (CLI, server, etc.), use automatic platform detection
 **Step 1: Add dependency to `pubspec.yaml`**
 ```yaml
 dependencies:
-  mmap2: ^0.1.0    # Core package only
+  mmap2: ^0.2.1    # Core package only
 ```
 
 **Step 2: Initialize and use**
@@ -173,7 +175,7 @@ For advanced use cases where you need custom library loading logic:
 **Step 1: Add dependency to `pubspec.yaml`**
 ```yaml
 dependencies:
-  mmap2: ^0.1.0      # Core package only
+  mmap2: ^0.2.1      # Core package only
 ```
 
 **Step 2: Set custom loader and initialize**
@@ -240,7 +242,7 @@ void main() async {
   writeMmap.close();
   
   // Clean up
-  await file.delete();
+  // await file.delete();
 }
 ```
 
@@ -250,7 +252,7 @@ void main() async {
 
 ```dart
 // Method 1: Flutter applications (automatic platform handling)
-await MmapFlutter.initialize();
+MmapFlutter.initialize();
 
 // Method 2: Pure Dart applications (automatic platform detection)
 Mmap.initializePlatform();

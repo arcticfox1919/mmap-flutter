@@ -1,6 +1,6 @@
 name: mmap2_flutter
 description: "Flutter plugin for memory-mapped file I/O with native library support."
-version: 0.2.0
+version: 0.2.1
 homepage:
 
 environment:
