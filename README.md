@@ -274,12 +274,6 @@ final mmap = Mmap.fromFile('path/to/file.txt',
     length: 1024            // optional length (null = entire file)
 );
 
-// From file handle
-final mmap = Mmap.fromHandle(fileHandle, 
-    mode: AccessMode.write,
-    offset: 0,
-    length: 1024
-);
 ```
 
 #### Accessing Data
