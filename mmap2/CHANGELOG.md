@@ -14,3 +14,7 @@
 
 * Optimizing the code
 * Modify the document
+
+## 0.2.2
+
+* Modify the document to add download information about the desktop pre-built library

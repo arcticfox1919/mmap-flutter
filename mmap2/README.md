@@ -35,7 +35,9 @@ dependencies:
   mmap2: ^0.2.1
 ```
 
-For Flutter projects, you can additionally add `mmap2_flutter` dependency which provides pre-built native libraries for Android and iOS platforms, along with unified initialization for Flutter apps:
+For Flutter projects, you can additionally add `mmap2_flutter` dependency which provides pre-built native libraries for Android and iOS platforms, along with unified initialization for Flutter apps.
+
+For desktop platforms (Windows, Linux, macOS), you can download pre-built libraries from the [releases page](https://github.com/arcticfox1919/mmap-flutter/releases). These can be installed to your system's library search paths or bundled with your executable in the same directory.
 
 ```yaml
 dependencies:
@@ -72,7 +74,9 @@ void main() {
 The library supports three initialization methods depending on your use case:
 
 #### 1. Flutter Applications with MmapFlutter (Recommended)
-For Flutter applications, use the `mmap2_flutter` package which handles platform-specific library loading automatically:
+For Flutter projects, you can additionally add `mmap2_flutter` dependency which provides pre-built native libraries for Android and iOS platforms, along with unified initialization for Flutter apps.
+
+For desktop platforms (Windows, Linux, macOS), you can download pre-built libraries from the [releases page](https://github.com/arcticfox1919/mmap-flutter/releases). These can be installed to your system's library search paths or bundled with your executable in the same directory.
 
 **Step 1: Add dependencies to `pubspec.yaml`**
 ```yaml
@@ -99,7 +103,7 @@ void main() async {
 ```
 
 #### 2. Pure Dart Applications with Automatic Platform Detection
-For pure Dart applications (CLI, server, etc.), use automatic platform detection:
+For pure Dart applications (CLI, server, etc.), use automatic platform detection. Pre-built desktop libraries are available from the [releases page](https://github.com/arcticfox1919/mmap-flutter/releases) and should be installed to your system's library search paths or placed in the same directory as your executable.
 
 **Step 1: Add dependency to `pubspec.yaml`**
 ```yaml

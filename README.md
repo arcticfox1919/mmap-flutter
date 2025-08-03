@@ -119,7 +119,9 @@ For detailed build information, see the document [mmap2 Native Library Builder](
 The library supports three initialization methods depending on your use case:
 
 #### 1. Flutter Applications with MmapFlutter (Recommended)
-For Flutter projects, you can additionally add `mmap2_flutter` dependency which provides pre-built native libraries for Android and iOS platforms, along with unified initialization for Flutter apps:
+For Flutter projects, you can additionally add `mmap2_flutter` dependency which provides pre-built native libraries for Android and iOS platforms, along with unified initialization for Flutter apps.
+
+For desktop platforms (Windows, Linux, macOS), you can download pre-built libraries from the [releases page](https://github.com/arcticfox1919/mmap-flutter/releases). These can be installed to your system's library search paths or bundled with your executable in the same directory.
 
 **Step 1: Add dependencies to `pubspec.yaml`**
 ```yaml
@@ -146,7 +148,7 @@ void main() async {
 ```
 
 #### 2. Pure Dart Applications with Automatic Platform Detection
-For pure Dart applications (CLI, server, etc.), use automatic platform detection:
+For pure Dart applications (CLI, server, etc.), use automatic platform detection. Pre-built desktop libraries are available from the [releases page](https://github.com/arcticfox1919/mmap-flutter/releases) and should be installed to your system's library search paths or placed in the same directory as your executable.
 
 **Step 1: Add dependency to `pubspec.yaml`**
 ```yaml
@@ -318,9 +320,9 @@ try {
 
 | Platform | Library File | Initialization Methods | Notes |
 |----------|-------------|----------------------|-------|
-| Windows  | `mmap2.dll` | 1. `MmapFlutter.initialize()`<br>2. `Mmap.initializePlatform()`<br>3. `Mmap.setLibraryLoader()` | Requires Visual Studio 2015+ |
-| Linux    | `libmmap2.so` | 1. `MmapFlutter.initialize()`<br>2. `Mmap.initializePlatform()`<br>3. `Mmap.setLibraryLoader()` | Requires GCC 4.8+ or Clang 3.4+ |
-| macOS    | `libmmap2.dylib` | 1. `MmapFlutter.initialize()`<br>2. `Mmap.initializePlatform()`<br>3. `Mmap.setLibraryLoader()` | Requires Xcode 8.0+ |
+| Windows  | `mmap2.dll` | 1. `MmapFlutter.initialize()`<br>2. `Mmap.initializePlatform()`<br>3. `Mmap.setLibraryLoader()` | Pre-built binaries available from [releases](https://github.com/arcticfox1919/mmap-flutter/releases). Requires Visual Studio 2015+ |
+| Linux    | `libmmap2.so` | 1. `MmapFlutter.initialize()`<br>2. `Mmap.initializePlatform()`<br>3. `Mmap.setLibraryLoader()` | Pre-built binaries available from [releases](https://github.com/arcticfox1919/mmap-flutter/releases). Requires GCC 4.8+ or Clang 3.4+ |
+| macOS    | `libmmap2.dylib` | 1. `MmapFlutter.initialize()`<br>2. `Mmap.initializePlatform()`<br>3. `Mmap.setLibraryLoader()` | Pre-built binaries available from [releases](https://github.com/arcticfox1919/mmap-flutter/releases). Requires Xcode 8.0+ |
 | Android  | `libmmap2.so` | 1. `MmapFlutter.initialize()` (recommended)<br>2. Custom loading via `setLibraryLoader()` | Packaged with APK |
 | iOS      | Static linking | 1. `MmapFlutter.initialize()` (recommended)<br>2. `DynamicLibrary.process()` | Statically linked into app |
 
@@ -328,8 +330,22 @@ try {
 
 - **Android**: Native library is packaged in the APK's `jniLibs` directory
 - **iOS**: Library is statically linked into the application binary
-- **Desktop**: Dynamic library loading with automatic path resolution
+- **Desktop**: Dynamic library loading with automatic path resolution. Pre-built libraries can be downloaded from the [releases page](https://github.com/arcticfox1919/mmap-flutter/releases) and installed to system library paths or bundled with your executable
 - **Mobile**: May have additional sandbox restrictions on file access
+
+### Library Management
+
+For desktop platforms, you can use the `mmap2_cli` tool to automatically download and manage native libraries:
+
+```bash
+# Install globally to system library paths
+dart pub global activate mmap2_cli
+mmap2_cli install --target global
+
+# Or install to your project's debug/release build directories
+mmap2_cli install --target debug
+mmap2_cli install --target release
+```
 
 For detailed build instructions for each platform, see [Cross-Platform Build Guide](docs/CROSS_PLATFORM_BUILD.md).
 
