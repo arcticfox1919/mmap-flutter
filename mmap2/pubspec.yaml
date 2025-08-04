@@ -3,8 +3,11 @@ description: |
   Bindings for `An mmap package for Dart`.
 
   Regenerate bindings with `dart run ffigen --config ffigen.yaml`.
-version: 0.2.2
+version: 0.2.3
 homepage: https://github.com/arcticfox1919/mmap-flutter
+
+topics:
+  - mmap
 
 environment:
   sdk: ^3.8.1
