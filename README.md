@@ -333,24 +333,10 @@ try {
 - **Desktop**: Dynamic library loading with automatic path resolution. Pre-built libraries can be downloaded from the [releases page](https://github.com/arcticfox1919/mmap-flutter/releases) and installed to system library paths or bundled with your executable
 - **Mobile**: May have additional sandbox restrictions on file access
 
-### Library Management
-
-For desktop platforms, you can use the `mmap2_cli` tool to automatically download and manage native libraries:
-
-```bash
-# Install globally to system library paths
-dart pub global activate mmap2_cli
-mmap2_cli install --target global
-
-# Or install to your project's debug/release build directories
-mmap2_cli install --target debug
-mmap2_cli install --target release
-```
-
-For detailed build instructions for each platform, see [Cross-Platform Build Guide](docs/CROSS_PLATFORM_BUILD.md).
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 The original mio library is also licensed under the MIT License.
+
